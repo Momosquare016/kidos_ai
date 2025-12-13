@@ -9,18 +9,14 @@ import GamesSection from './components/GamesSection';
 import SettingsModal from './components/SettingsModal';
 import './App.css';
 
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
 function App() {
   const [ageGroup, setAgeGroup] = useState('middle');
   const [activeSection, setActiveSection] = useState('chat');
   const [parentMode, setParentMode] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('geminiApiKey') || '');
   const [chatKey, setChatKey] = useState(0);
-
-  const handleApiKeySave = (key) => {
-    setApiKey(key);
-    localStorage.setItem('geminiApiKey', key);
-  };
 
   const handleParentModeToggle = () => {
     setParentMode(!parentMode);
@@ -57,7 +53,7 @@ function App() {
         <Navigation activeSection={activeSection} onSectionChange={setActiveSection} />
 
         {activeSection === 'chat' && (
-          <ChatSection key={chatKey} apiKey={apiKey} ageGroup={ageGroup} />
+          <ChatSection key={chatKey} apiKey={API_KEY} ageGroup={ageGroup} />
         )}
 
         {activeSection === 'learn' && (
@@ -76,8 +72,6 @@ function App() {
         <SettingsModal
           show={showSettings}
           onHide={() => setShowSettings(false)}
-          apiKey={apiKey}
-          onApiKeySave={handleApiKeySave}
           onClearChat={handleClearChat}
           onResetProgress={handleResetProgress}
         />

@@ -23,10 +23,7 @@ function ChatSection({ apiKey, ageGroup }) {
 
   useEffect(() => {
     // Show welcome message
-    const welcomeMessage = apiKey
-      ? "Hello! I'm KIDOS AI, your friendly learning companion! What would you like to learn about today? You can ask me about animals, space, dinosaurs, science, and more!"
-      : "Welcome to KIDOS AI! To start chatting with me, please click the 'Settings' button at the top and add your free Gemini API key. It only takes a minute to set up!";
-
+    const welcomeMessage = "Hello! I'm KIDOS AI, your friendly learning companion! What would you like to learn about today? You can ask me about animals, space, dinosaurs, science, and more!";
     setMessages([{ sender: 'ai', text: welcomeMessage }]);
   }, []);
 
@@ -51,18 +48,6 @@ function ChatSection({ apiKey, ageGroup }) {
     addMessage(message, 'user');
     setInputValue('');
     setIsTyping(true);
-
-    // Check if API key is set
-    if (!apiKey) {
-      setTimeout(() => {
-        setIsTyping(false);
-        addMessage(
-          "Please set up your Gemini API key first! Click the 'Settings' button at the top to add your free API key from Google AI Studio.",
-          'ai'
-        );
-      }, 500);
-      return;
-    }
 
     try {
       const aiResponse = await callGeminiAPI(message, apiKey, ageGroup, conversationHistory);
