@@ -1,0 +1,48 @@
+/* KIDOS AI Global Styles */
+
+:root {
+  --primary-color: #9c27b0;
+  --secondary-color: #e91e63;
+  --accent-color: #f06292;
+  --light-color: #fce4ec;
+  --dark-color: #7b1fa2;
+  --success-color: #ab47bc;
+  --little-color: #ce93d8;
+  --middle-color: #f48fb1;
+  --big-color: #7c4dff;
+  --gradient-start: #9c27b0;
+  --gradient-end: #e91e63;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', sans-serif;
+  background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e1bee7 100%);
+  color: #333;
+  line-height: 1.6;
+  min-height: 100vh;
+  margin: 0;
+}
+
+#root {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  text-align: left;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--secondary-color);
+}
