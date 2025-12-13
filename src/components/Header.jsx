@@ -1,7 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { FaRobot, FaCog } from 'react-icons/fa';
 
-function Header({ onSettingsClick, parentMode, onParentModeToggle }) {
+function Header({ onSettingsClick }) {
   return (
     <header className="text-center py-4 mb-4 position-relative">
       <div className="top-buttons">
@@ -11,13 +11,6 @@ function Header({ onSettingsClick, parentMode, onParentModeToggle }) {
           onClick={onSettingsClick}
         >
           <FaCog /> Settings
-        </Button>
-        <Button
-          variant="secondary"
-          className="parent-mode-button"
-          onClick={onParentModeToggle}
-        >
-          {parentMode ? 'Exit Parent Mode' : 'Parent Mode'}
         </Button>
       </div>
 

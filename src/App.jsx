@@ -14,18 +14,8 @@ const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 function App() {
   const [ageGroup, setAgeGroup] = useState('middle');
   const [activeSection, setActiveSection] = useState('chat');
-  const [parentMode, setParentMode] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [chatKey, setChatKey] = useState(0);
-
-  const handleParentModeToggle = () => {
-    setParentMode(!parentMode);
-    alert(
-      !parentMode
-        ? 'Parent Mode activated. Content filtering is less restrictive for educational purposes.'
-        : 'Parent Mode deactivated. Full content filtering is now active.'
-    );
-  };
 
   const handleTopicClick = (topicName) => {
     setActiveSection('chat');
@@ -42,11 +32,7 @@ function App() {
   return (
     <div className="main-wrapper">
       <Container className="app-container">
-        <Header
-          onSettingsClick={() => setShowSettings(true)}
-          parentMode={parentMode}
-          onParentModeToggle={handleParentModeToggle}
-        />
+        <Header onSettingsClick={() => setShowSettings(true)} />
 
         <AgeSelector currentAge={ageGroup} onAgeChange={setAgeGroup} />
 
