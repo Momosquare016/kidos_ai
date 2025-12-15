@@ -8,72 +8,120 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="parent-mode">
-            <button class="parent-mode-button">Parent Mode</button>
-        </div>
-        
-        <header>
-            <div class="character">
-                <i class="fas fa-robot"></i>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="top-buttons">
+                <button class="settings-button" id="settings-btn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <button class="parent-mode-button">Parent Mode</button>
             </div>
-            <h1 class="logo">KIDOS AI</h1>
-            <p class="tagline">Your Friendly Learning Companion!</p>
-        </header>
-        
-        <div class="age-selector">
-            <button class="age-button" id="little-kids">Little Kids (3-7)</button>
-            <button class="age-button active" id="middle-kids">Middle Kids (8-12)</button>
-            <button class="age-button" id="big-kids">Big Kids (13-18)</button>
-        </div>
-        
-        <div class="main-nav">
-            <button class="nav-button active" id="chat-nav">Chat</button>
-            <button class="nav-button" id="learn-nav">Learn</button>
-            <button class="nav-button" id="games-nav">Games</button>
-        </div>
-        
-        <!-- Chat Section -->
-        <div class="content-section active" id="chat-section">
-            <div class="chat-container">
-                <div class="chat-messages">
-                    <!-- Messages will be added here dynamically -->
+
+            <!-- Settings Modal -->
+            <div class="modal-overlay" id="settings-modal">
+                <div class="modal-content">
+                    <h2><i class="fas fa-cog"></i> Settings</h2>
+                    <button class="modal-close" id="modal-close">&times;</button>
+
+                    <div class="settings-section">
+                        <h3>Google Gemini API Key</h3>
+                        <p class="settings-description">
+                            To enable AI chat, you need a free Gemini API key from Google.
+                            <a href="https://aistudio.google.com/app/apikey" target="_blank">Get your free API key here</a>
+                        </p>
+                        <div class="api-key-input-group">
+                            <input type="password" id="api-key-input" placeholder="Enter your Gemini API key..." />
+                            <button class="toggle-visibility" id="toggle-key-visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <button class="save-api-key-btn" id="save-api-key">
+                            <i class="fas fa-save"></i> Save API Key
+                        </button>
+                        <p class="api-status" id="api-status"></p>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Clear Chat History</h3>
+                        <p class="settings-description">Clear all messages and start fresh.</p>
+                        <button class="clear-chat-btn" id="clear-chat">
+                            <i class="fas fa-trash"></i> Clear Chat
+                        </button>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Reset Progress</h3>
+                        <p class="settings-description">Reset all badges, stats, and learning progress.</p>
+                        <button class="reset-progress-btn" id="reset-progress">
+                            <i class="fas fa-redo"></i> Reset Progress
+                        </button>
+                    </div>
                 </div>
-                <div class="chat-input">
-                    <button class="voice-input-button">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                    <input type="text" class="message-input" placeholder="Type your question here...">
-                    <button class="send-button">
-                        <i class="fas fa-paper-plane"></i> Send
-                    </button>
+            </div>
+
+            <header>
+                <div class="character">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h1 class="logo">KIDOS AI</h1>
+                <p class="tagline">Your Friendly Learning Companion!</p>
+            </header>
+
+            <div class="age-selector">
+                <button class="age-button" id="little-kids">Little Kids (3-7)</button>
+                <button class="age-button active" id="middle-kids">Middle Kids (8-12)</button>
+                <button class="age-button" id="big-kids">Big Kids (13-18)</button>
+            </div>
+
+            <div class="main-nav">
+                <button class="nav-button active" id="chat-nav">Chat</button>
+                <button class="nav-button" id="learn-nav">Learn</button>
+                <button class="nav-button" id="games-nav">Games</button>
+            </div>
+
+            <!-- Chat Section -->
+            <div class="content-section active" id="chat-section">
+                <div class="chat-container">
+                    <div class="chat-messages">
+                        <!-- Messages will be added here dynamically -->
+                    </div>
+                    <div class="chat-input">
+                        <button class="voice-input-button">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <input type="text" class="message-input" placeholder="Type your question here...">
+                        <button class="send-button">
+                            <i class="fas fa-paper-plane"></i> Send
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Learn Section -->
-        <div class="content-section" id="learn-section">
-            <h2 class="section-title">Explore and Learn</h2>
-            <p class="section-description">Discover amazing facts and information about topics you love!</p>
-            <div class="topics-container">
-                <!-- Topics will be added here dynamically -->
+
+            <!-- Learn Section -->
+            <div class="content-section" id="learn-section">
+                <h2 class="section-title">Explore and Learn</h2>
+                <p class="section-description">Discover amazing facts and information about topics you love!</p>
+                <div class="topics-container">
+                    <!-- Topics will be added here dynamically -->
+                </div>
             </div>
-        </div>
-        
-        <!-- Games Section -->
-        <div class="content-section" id="games-section">
-            <h2 class="section-title">Fun Learning Games</h2>
-            <p class="section-description">Play these educational games to boost your brain power!</p>
-            <div class="games-container">
-                <!-- Games will be added here dynamically -->
+
+            <!-- Games Section -->
+            <div class="content-section" id="games-section">
+                <h2 class="section-title">Fun Learning Games</h2>
+                <p class="section-description">Play these educational games to boost your brain power!</p>
+                <div class="games-container">
+                    <!-- Games will be added here dynamically -->
+                </div>
             </div>
+
+            <footer>
+                <p>&copy; 2025 KIDOS AI - A safe learning environment for children</p>
+            </footer>
         </div>
-        
-        <footer>
-            <p>&copy; 2025 KIDOS AI - A safe learning environment for children</p>
-        </footer>
+
     </div>
-    
+
     <script src="app.js"></script>
 </body>
 </html>

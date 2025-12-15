@@ -5,13 +5,17 @@ import json
 import random
 import requests
 
+# Load environment variables from .env file
+from dotenv import load_dotenv
+load_dotenv()
+
 # Import the necessary path configuration
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-# Configure Flask app with correct static folder
-app = Flask(__name__, 
-            static_folder='static',
+# Configure Flask app - serve files from current directory
+app = Flask(__name__,
+            static_folder='.',
             static_url_path='')
 
 # Content filtering patterns - improved to catch more variations
@@ -99,12 +103,26 @@ CONFUSION_RESPONSES = [
 ]
 
 # OpenAI API configuration
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', 'your_openai_api_key')  # Replace with your actual API key
+# API key should be set in .env file, NEVER hardcode it here!
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
+
+# Warn if API key is not configured
+if not OPENAI_API_KEY:
+    print("WARNING: OPENAI_API_KEY environment variable is not set!")
+    print("Please create a .env file with your API key. See .env.example for format.")
 
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
+
+@app.route('/styles.css')
+def styles():
+    return app.send_static_file('styles.css')
+
+@app.route('/app.js')
+def appjs():
+    return app.send_static_file('app.js')
 
 @app.route('/api/topics')
 def get_topics():
