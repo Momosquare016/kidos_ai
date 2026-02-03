@@ -102,14 +102,14 @@ CONFUSION_RESPONSES = [
     "I'm designed to help with educational topics. Can I tell you about dinosaurs, space, or science experiments instead?"
 ]
 
-# OpenAI API configuration
+# Groq API configuration
 # API key should be set in .env file, NEVER hardcode it here!
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
+GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 # Warn if API key is not configured
-if not OPENAI_API_KEY:
-    print("WARNING: OPENAI_API_KEY environment variable is not set!")
+if not GROQ_API_KEY:
+    print("WARNING: GROQ_API_KEY environment variable is not set!")
     print("Please create a .env file with your API key. See .env.example for format.")
 
 @app.route('/')
@@ -157,8 +157,8 @@ def chat():
             'response': random.choice(CONFUSION_RESPONSES)
         })
     
-    # Process the message using OpenAI API
-    response = generate_openai_response(user_message, age_group)
+    # Process the message using Groq API
+    response = generate_groq_response(user_message, age_group)
     
     return jsonify({
         'response': response
@@ -180,8 +180,8 @@ def contains_inappropriate_content(message):
     
     return False
 
-def generate_openai_response(message, age_group):
-    """Generate an age-appropriate response using OpenAI API"""
+def generate_groq_response(message, age_group):
+    """Generate an age-appropriate response using Groq API"""
     try:
         # Define age-appropriate language complexity
         language_level = {
@@ -189,15 +189,15 @@ def generate_openai_response(message, age_group):
             'middle': "clear, straightforward language suitable for 8-12 year old children",
             'big': "slightly more advanced language suitable for 13-18 year old teenagers"
         }
-        
+
         # Create system message with safety and age-appropriate instructions
         system_message = f"""
         You are KIDOS AI, a friendly AI assistant for children aged {
-            '3-7' if age_group == 'little' else 
-            '8-12' if age_group == 'middle' else 
+            '3-7' if age_group == 'little' else
+            '8-12' if age_group == 'middle' else
             '13-18'
-        }. 
-        
+        }.
+
         IMPORTANT SAFETY RULES:
         1. NEVER discuss inappropriate topics including: violence, death, drugs, alcohol, sex, profanity, or mature themes
         2. If asked about these topics, politely redirect to educational topics
@@ -207,30 +207,30 @@ def generate_openai_response(message, age_group):
         6. Focus on educational content about science, history, animals, space, math, art, and other age-appropriate subjects
         7. Keep responses concise (2-4 sentences for little kids, 3-5 for middle/big kids)
         8. If you don't know something, admit it and suggest learning about a related topic instead
-        
+
         Your goal is to be helpful, educational, and safe for children.
         """
-        
+
         # Prepare the API request
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {OPENAI_API_KEY}"
+            "Authorization": f"Bearer {GROQ_API_KEY}"
         }
-        
+
         payload = {
-            "model": "gpt-3.5-turbo",
+            "model": "llama-3.3-70b-versatile",
             "messages": [
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": message}
             ],
             "temperature": 0.7,
-            "max_tokens": 150
+            "max_tokens": 512
         }
-        
+
         # Make the API request
-        response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
+        response = requests.post(GROQ_API_URL, headers=headers, json=payload)
         response_data = response.json()
-        
+
         # Extract and return the AI's response
         if "choices" in response_data and len(response_data["choices"]) > 0:
             ai_message = response_data["choices"][0]["message"]["content"].strip()
@@ -238,9 +238,9 @@ def generate_openai_response(message, age_group):
         else:
             # Fallback to rule-based responses if API fails
             return generate_fallback_response(message, age_group)
-            
+
     except Exception as e:
-        print(f"Error calling OpenAI API: {str(e)}")
+        print(f"Error calling Groq API: {str(e)}")
         # Fallback to rule-based responses if API fails
         return generate_fallback_response(message, age_group)
 
