@@ -1,9 +1,9 @@
 import { Button } from 'react-bootstrap';
-import { FaRobot, FaCog } from 'react-icons/fa';
+import { FaRobot, FaCog, FaStar, FaRocket } from 'react-icons/fa';
 
 function Header({ onSettingsClick }) {
   return (
-    <header className="text-center py-4 mb-4 position-relative">
+    <header className="header-redesign">
       <div className="top-buttons">
         <Button
           variant="primary"
@@ -14,11 +14,21 @@ function Header({ onSettingsClick }) {
         </Button>
       </div>
 
-      <div className="character">
-        <FaRobot />
+      <div className="header-content">
+        <div className="header-icon-group">
+          <FaStar className="header-star star-1" />
+          <div className="character">
+            <FaRobot />
+          </div>
+          <FaStar className="header-star star-2" />
+        </div>
+        <div className="header-text">
+          <h1 className="logo">KIDOS AI</h1>
+          <p className="tagline">
+            <FaRocket className="tagline-icon" /> Learn, Explore, Have Fun!
+          </p>
+        </div>
       </div>
-      <h1 className="logo">KIDOS AI</h1>
-      <p className="tagline">Your Friendly Learning Companion!</p>
     </header>
   );
 }

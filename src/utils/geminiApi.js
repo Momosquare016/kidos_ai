@@ -29,9 +29,12 @@ Be conversational and engaging - not robotic. Use the child's name if they share
 }
 
 export async function callGeminiAPI(message, apiKey, ageGroup, conversationHistory) {
+  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+    throw new Error('API key not configured. Please add your Gemini API key in the .env file.');
+  }
+
   const contents = [];
 
-  // Add system prompt as first user message (Gemini doesn't have system role)
   contents.push({
     role: 'user',
     parts: [{ text: getSystemPrompt(ageGroup) + '\n\nPlease acknowledge these rules and say you understand.' }]
@@ -79,8 +82,11 @@ export async function callGeminiAPI(message, apiKey, ageGroup, conversationHisto
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error?.message || 'API request failed');
+    if (response.status === 429) {
+      throw new Error('Rate limited - please wait a moment and try again.');
+    }
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error?.message || `API request failed (${response.status})`);
   }
 
   const data = await response.json();
