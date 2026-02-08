@@ -1,13 +1,8 @@
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
-export function getSystemPrompt(ageGroup) {
-  const ageDescriptions = {
-    little: '3-7 years old. Use very simple words, short sentences, and be extra friendly and encouraging. Use analogies they understand (like toys, cartoons, family).',
-    middle: '8-12 years old. Use clear explanations with some educational vocabulary. Be engaging and curious. Can handle more complex topics explained simply.',
-    big: '13-18 years old. Use more sophisticated language and can discuss deeper topics. Still be respectful and educational.'
-  };
-
-  return `You are KIDOS AI, a friendly, safe, and educational AI assistant for children aged ${ageDescriptions[ageGroup]}
+function getSystemPrompt() {
+  return `You are KIDOS AI, a friendly, safe, and educational AI assistant for children.
 
 CRITICAL SAFETY RULES - YOU MUST ABSOLUTELY FOLLOW THESE:
 1. NEVER use profanity, swear words, or inappropriate language
@@ -25,26 +20,25 @@ TOPICS YOU CAN DISCUSS: Science, animals, space, history, geography, math, art, 
 
 TOPICS YOU MUST NEVER DISCUSS: Sex, reproduction, LGBTQ, gender identity, violence, self-harm, drugs, alcohol, or any adult themes.
 
-Be conversational and engaging - not robotic. Use the child's name if they share it. Ask follow-up questions to keep them engaged. Make learning fun! Format your responses with good spacing and line breaks for readability.`;
+Use clear and simple language. Be conversational and engaging - not robotic. Use the child's name if they share it. Ask follow-up questions to keep them engaged. Make learning fun! Format your responses with good spacing and line breaks for readability.`;
 }
 
-export async function callGeminiAPI(message, apiKey, ageGroup, conversationHistory) {
-  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
-    throw new Error('API key not configured. Please add your Gemini API key in the .env file.');
+export async function callGeminiAPI(message, conversationHistory) {
+  if (!API_KEY || API_KEY === 'your_gemini_api_key_here') {
+    throw new Error('API key not configured');
   }
 
   const contents = [];
 
   contents.push({
     role: 'user',
-    parts: [{ text: getSystemPrompt(ageGroup) + '\n\nPlease acknowledge these rules and say you understand.' }]
+    parts: [{ text: getSystemPrompt() + '\n\nPlease acknowledge these rules and say you understand.' }]
   });
   contents.push({
     role: 'model',
-    parts: [{ text: "I understand! I'm KIDOS AI, a friendly and safe assistant for kids. I'll keep everything fun, educational, and age-appropriate. I'm excited to help with learning about science, animals, space, and lots more! What would you like to explore today?" }]
+    parts: [{ text: "I understand! I'm KIDOS AI, a friendly and safe assistant for kids. I'll keep everything fun, educational, and age-appropriate. What would you like to explore today?" }]
   });
 
-  // Add conversation history (last 10 messages for context)
   const recentHistory = conversationHistory.slice(-10);
   for (const msg of recentHistory) {
     contents.push({
@@ -53,13 +47,12 @@ export async function callGeminiAPI(message, apiKey, ageGroup, conversationHisto
     });
   }
 
-  // Add current message
   contents.push({
     role: 'user',
     parts: [{ text: message }]
   });
 
-  const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+  const response = await fetch(`${GEMINI_API_URL}?key=${API_KEY}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -96,16 +89,4 @@ export async function callGeminiAPI(message, apiKey, ageGroup, conversationHisto
   }
 
   throw new Error('No response from AI');
-}
-
-export async function testApiKey(apiKey) {
-  const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ role: 'user', parts: [{ text: 'Say "API key works!" in exactly those words.' }] }]
-    })
-  });
-
-  return response.ok;
 }

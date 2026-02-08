@@ -1,32 +1,22 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from './components/Header';
-import AgeSelector from './components/AgeSelector';
 import Navigation from './components/Navigation';
 import ChatSection from './components/ChatSection';
 import LearnSection from './components/LearnSection';
 import GamesSection from './components/GamesSection';
 import SettingsModal from './components/SettingsModal';
+import { FaEnvelope } from 'react-icons/fa';
+import { FaLinkedin } from 'react-icons/fa';
 import './App.css';
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-
 function App() {
-  const [ageGroup, setAgeGroup] = useState('middle');
   const [activeSection, setActiveSection] = useState('chat');
   const [showSettings, setShowSettings] = useState(false);
   const [chatKey, setChatKey] = useState(0);
 
-  const handleTopicClick = (topicName) => {
-    setActiveSection('chat');
-  };
-
   const handleClearChat = () => {
     setChatKey(prev => prev + 1);
-  };
-
-  const handleResetProgress = () => {
-    localStorage.removeItem('kidosStats');
   };
 
   return (
@@ -34,32 +24,32 @@ function App() {
       <Container className="app-container">
         <Header onSettingsClick={() => setShowSettings(true)} />
 
-        <AgeSelector currentAge={ageGroup} onAgeChange={setAgeGroup} />
-
         <Navigation activeSection={activeSection} onSectionChange={setActiveSection} />
 
         {activeSection === 'chat' && (
-          <ChatSection key={chatKey} apiKey={API_KEY} ageGroup={ageGroup} />
+          <ChatSection key={chatKey} />
         )}
 
-        {activeSection === 'learn' && (
-          <LearnSection
-            ageGroup={ageGroup}
-            onTopicClick={handleTopicClick}
-          />
-        )}
+        {activeSection === 'learn' && <LearnSection />}
 
-        {activeSection === 'games' && <GamesSection ageGroup={ageGroup} />}
+        {activeSection === 'games' && <GamesSection />}
 
-        <footer className="text-center py-4">
+        <footer className="app-footer text-center py-4">
           <p>&copy; 2025 KIDOS AI - A safe learning environment for children</p>
+          <div className="footer-links">
+            <a href="mailto:monotify016@gmail.com" className="footer-link">
+              <FaEnvelope /> monotify016@gmail.com
+            </a>
+            <a href="https://www.linkedin.com/in/muhammad-ali-r-35a9762b4/" target="_blank" rel="noopener noreferrer" className="footer-link">
+              <FaLinkedin /> LinkedIn
+            </a>
+          </div>
         </footer>
 
         <SettingsModal
           show={showSettings}
           onHide={() => setShowSettings(false)}
           onClearChat={handleClearChat}
-          onResetProgress={handleResetProgress}
         />
       </Container>
     </div>

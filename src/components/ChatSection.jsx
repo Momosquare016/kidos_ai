@@ -7,7 +7,7 @@ import { generateLocalResponse } from '../utils/localResponses';
 import { RESTRICTED_RESPONSE } from '../data/content';
 import AiAvatar from './AiAvatar';
 
-function ChatSection({ apiKey, ageGroup }) {
+function ChatSection() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -31,6 +31,10 @@ function ChatSection({ apiKey, ageGroup }) {
     setMessages((prev) => [...prev, { sender, text, timestamp: new Date().toISOString() }]);
   };
 
+  const handleMicClick = () => {
+    alert('Voice input is coming soon! Stay tuned!');
+  };
+
   const handleSendMessage = async () => {
     const message = inputValue.trim();
     if (!message) return;
@@ -49,7 +53,7 @@ function ChatSection({ apiKey, ageGroup }) {
     setIsTyping(true);
 
     try {
-      const aiResponse = await callGeminiAPI(message, apiKey, ageGroup, conversationHistory);
+      const aiResponse = await callGeminiAPI(message, conversationHistory);
       setIsTyping(false);
 
       if (containsInappropriateContent(aiResponse)) {
@@ -68,15 +72,7 @@ function ChatSection({ apiKey, ageGroup }) {
     } catch (error) {
       console.error('Gemini API error:', error);
       setIsTyping(false);
-
-      if (error.message && (error.message.includes('API key') || error.message.includes('401') || error.message.includes('403'))) {
-        addMessage(
-          "Oops! There's an issue connecting to my brain. Please check the API key in Settings!",
-          'ai'
-        );
-      } else {
-        addMessage(generateLocalResponse(message), 'ai');
-      }
+      addMessage(generateLocalResponse(message), 'ai');
     }
   };
 
@@ -111,7 +107,7 @@ function ChatSection({ apiKey, ageGroup }) {
             <div ref={messagesEndRef} />
           </div>
           <div className="chat-input">
-            <Button className="voice-input-button" variant="light">
+            <Button className="voice-input-button" variant="light" onClick={handleMicClick}>
               <FaMicrophone />
             </Button>
             <Form.Control
