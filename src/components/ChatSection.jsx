@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FaMicrophone, FaPaperPlane } from 'react-icons/fa';
 import { containsInappropriateContent } from '../utils/contentFilter';
-import { callGeminiAPI } from '../utils/geminiApi';
+import { callChatAPI } from '../utils/geminiApi';
 import { generateLocalResponse } from '../utils/localResponses';
 import { RESTRICTED_RESPONSE } from '../data/content';
 import AiAvatar from './AiAvatar';
@@ -53,7 +53,7 @@ function ChatSection() {
     setIsTyping(true);
 
     try {
-      const aiResponse = await callGeminiAPI(message, conversationHistory);
+      const aiResponse = await callChatAPI(message, conversationHistory);
       setIsTyping(false);
 
       if (containsInappropriateContent(aiResponse)) {
@@ -70,9 +70,14 @@ function ChatSection() {
         addMessage(aiResponse, 'ai');
       }
     } catch (error) {
-      console.error('Gemini API error:', error);
+      console.error('Chat API error:', error);
       setIsTyping(false);
-      addMessage(generateLocalResponse(message), 'ai');
+
+      if (error.message === 'API key not configured') {
+        addMessage("Oops! My AI brain isn't connected yet. The API key is missing — please check the .env file!", 'ai');
+      } else {
+        addMessage("Hmm, I had trouble thinking of a response. Let me try again — just send your message once more!", 'ai');
+      }
     }
   };
 
