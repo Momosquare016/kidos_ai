@@ -25,7 +25,7 @@ function Header({ onSettingsClick }) {
         <div className="header-text">
           <h1 className="logo">KIDOS AI</h1>
           <p className="tagline">
-            <FaRocket className="tagline-icon" /> Learn, Explore, Have Fun!
+            <FaRocket className="tagline-icon" /> Kid-safe AI with triple protection for fun, age-appropriate learning.
           </p>
         </div>
       </div>
